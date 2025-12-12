@@ -49,10 +49,10 @@
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex flex-col items-start text-sm">
-                                    <span class="font-bold text-gray-900">{{ number_format($f->prix, 0) }} XOF</span>
+                                    <span class="font-bold text-gray-900">{{ number_format($f->prix, 0) }}€</span>
                                     @if($f->prix_barre)
                                         <span
-                                            class="text-xs text-gray-400 line-through">{{ number_format($f->prix_barre, 0) }} XOF</span>
+                                            class="text-xs text-gray-400 line-through">{{ number_format($f->prix_barre, 0) }}€</span>
                                     @endif
                                 </div>
                             </td>

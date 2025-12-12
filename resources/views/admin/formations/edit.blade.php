@@ -3,7 +3,7 @@
 @section('subtitle', 'Mettre à jour le programme')
 
 @section('content')
-    <form action="{{ route('admin.formations.update', $formation) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.formations.update', $formation) }}" method="POST">
         @csrf
         @method('PUT')
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -16,31 +16,27 @@
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Nom de la formation</label>
                             <input type="text" name="nom" value="{{ $formation->nom }}" required
-                                class="w-full px-4 py-3 rounded-xl border border-gray-900 focus:border-orange-500 focus:ring-orange-500 transition-colors"
+                                class="w-full px-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors"
                                 placeholder="Ex: Masterclass Laravel 10">
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Description détaillée</label>
                             <textarea name="description" rows="5" required
-                                class="w-full px-4 py-3 rounded-xl border border-gray-900 focus:border-orange-500 focus:ring-orange-500 transition-colors"
+                                class="w-full px-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors"
                                 placeholder="Que vont apprendre les étudiants ?">{{ $formation->description }}</textarea>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Niveau</label>
-                                <select name="niveau"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-900 focus:border-orange-500 focus:ring-orange-500 transition-colors">
-                                    <option value="Débutant" {{ $formation->niveau == 'Débutant' ? 'selected' : '' }}>Débutant</option>
-                                    <option value="Intermédiaire" {{ $formation->niveau == 'Intermédiaire' ? 'selected' : '' }}>Intermédiaire</option>
-                                    <option value="Avancé" {{ $formation->niveau == 'Avancé' ? 'selected' : '' }}>Avancé</option>
-                                </select>
+                                <input type="text" name="niveau" value="{{ $formation->niveau }}"
+                                    class="w-full px-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors">
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Durée estimée</label>
                                 <input type="text" name="duree" value="{{ $formation->duree }}" placeholder="Ex: 10h 30m"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-900 focus:border-orange-500 focus:ring-orange-500 transition-colors">
+                                    class="w-full px-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors">
                             </div>
                         </div>
                     </div>
@@ -51,15 +47,13 @@
 
                     <div class="space-y-6">
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Image de couverture</label>
-                            @if($formation->image_url)
-                                <div class="mb-3 max-w-xs">
-                                    <img src="{{ $formation->image_url }}" alt="Image actuelle" class="w-full h-auto object-cover rounded-lg border border-gray-900">
-                                </div>
-                            @endif
-                            <input type="file" name="image" accept="image/*"
-                                class="w-full px-4 py-3 rounded-xl border border-gray-900 focus:border-orange-500 focus:ring-orange-500 transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100">
-                            <p class="text-xs text-gray-500 mt-1">Laissez vide pour conserver l'image actuelle</p>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Image de couverture URL</label>
+                            <div class="relative">
+                                <input type="url" name="image_url" value="{{ $formation->image_url }}"
+                                    placeholder="https://..."
+                                    class="w-full pl-10 pr-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors">
+                                <i class="fas fa-image absolute left-3 top-4 text-gray-400"></i>
+                            </div>
                         </div>
 
                         <div>
@@ -67,7 +61,7 @@
                             <div class="relative">
                                 <input type="url" name="lien_achat" value="{{ $formation->lien_achat }}"
                                     placeholder="https://..."
-                                    class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-900 focus:border-orange-500 focus:ring-orange-500 transition-colors">
+                                    class="w-full pl-10 pr-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors">
                                 <i class="fas fa-shopping-cart absolute left-3 top-4 text-gray-400"></i>
                             </div>
                         </div>
@@ -84,20 +78,20 @@
 
                     <div class="space-y-6 mb-6">
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Prix (XOF)</label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Prix (€)</label>
                             <div class="relative">
-                                <input type="number" name="prix" value="{{ $formation->prix }}" step="1" required
-                                    class="w-full pl-16 pr-4 py-3 rounded-xl border border-gray-900 focus:border-orange-500 focus:ring-orange-500 transition-colors font-mono text-lg font-bold text-gray-900">
-                                <span class="absolute left-4 top-4 text-gray-400">XOF</span>
+                                <input type="number" name="prix" value="{{ $formation->prix }}" step="0.01" required
+                                    class="w-full pl-8 pr-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors font-mono text-lg font-bold text-gray-900">
+                                <span class="absolute left-4 top-4 text-gray-400">€</span>
                             </div>
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Prix barré (Optionnel)</label>
                             <div class="relative">
-                                <input type="number" name="prix_barre" value="{{ $formation->prix_barre }}" step="1"
-                                    class="w-full pl-16 pr-4 py-3 rounded-xl border border-gray-900 focus:border-orange-500 focus:ring-orange-500 transition-colors font-mono text-gray-500">
-                                <span class="absolute left-4 top-4 text-gray-400">XOF</span>
+                                <input type="number" name="prix_barre" value="{{ $formation->prix_barre }}" step="0.01"
+                                    class="w-full pl-8 pr-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors font-mono text-gray-500">
+                                <span class="absolute left-4 top-4 text-gray-400">€</span>
                             </div>
                             <p class="text-xs text-gray-500 mt-1">Laissez vide si pas de promotion</p>
                         </div>
@@ -105,7 +99,7 @@
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Badge promo</label>
                             <input type="text" name="badge" value="{{ $formation->badge }}" placeholder="Ex: -30%"
-                                class="w-full px-4 py-3 rounded-xl border border-gray-900 focus:border-orange-500 focus:ring-orange-500 transition-colors">
+                                class="w-full px-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors">
                         </div>
 
                         <div class="pt-4 border-t border-gray-100">

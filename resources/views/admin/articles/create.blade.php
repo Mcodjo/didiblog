@@ -3,7 +3,7 @@
 @section('subtitle', 'Rédigez et publiez un nouveau contenu')
 
 @section('content')
-    <form action="{{ route('admin.articles.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.articles.store') }}" method="POST">
         @csrf
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Main Content (Left Column) -->
@@ -16,7 +16,7 @@
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Titre de l'article</label>
                             <input type="text" name="titre" value="{{ old('titre') }}" required
-                                class="w-full px-4 py-3 rounded-xl border border-gray-900 focus:border-orange-500 focus:ring-orange-500 transition-colors placeholder-gray-400"
+                                class="w-full px-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors placeholder-gray-400"
                                 placeholder="Ex: Les 10 compétences clés en 2025...">
                             @error('titre')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
                         </div>
@@ -24,14 +24,14 @@
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Extrait (Introduction)</label>
                             <textarea name="extrait" rows="3" required
-                                class="w-full px-4 py-3 rounded-xl border border-gray-900 focus:border-orange-500 focus:ring-orange-500 transition-colors placeholder-gray-400"
+                                class="w-full px-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors placeholder-gray-400"
                                 placeholder="Un bref résumé qui donne envie de lire la suite...">{{ old('extrait') }}</textarea>
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Contenu complet</label>
                             <textarea name="contenu" rows="20" required
-                                class="w-full px-4 py-3 rounded-xl border border-gray-900 focus:border-orange-500 focus:ring-orange-500 transition-colors font-mono text-sm"
+                                class="w-full px-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors font-mono text-sm"
                                 placeholder="Rédigez votre article ici..."
                                 id="markdown-editor">{{ old('contenu') }}</textarea>
                             <p class="text-xs text-gray-500 mt-2 text-right">Markdown supporté</p>
@@ -96,7 +96,7 @@
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Catégorie</label>
                             <select name="categorie_id" required
-                                class="w-full px-4 py-2.5 rounded-xl border border-gray-900 focus:border-orange-500 focus:ring-orange-500 transition-colors">
+                                class="w-full px-4 py-2.5 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors">
                                 @foreach($categories as $cat)
                                     <option value="{{ $cat->id }}">{{ $cat->nom }}</option>
                                 @endforeach
@@ -104,21 +104,12 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Image de couverture</label>
-                            <div class="relative max-w-xs">
-                                <input type="file" name="image" id="image-upload" accept="image/*"
-                                    class="hidden"
-                                    onchange="previewImage(this)">
-                                <label for="image-upload"
-                                    class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-orange-500 hover:bg-orange-50 transition-colors">
-                                    <div id="upload-placeholder" class="flex flex-col items-center justify-center py-4">
-                                        <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
-                                        <p class="text-sm text-gray-500">Cliquez pour uploader</p>
-                                        <p class="text-xs text-gray-400 mt-1">PNG, JPG, WEBP (max 2MB)</p>
-                                    </div>
-                                    <img id="image-preview" class="hidden w-full h-full object-cover rounded-xl" alt="Aperçu">
-                                </label>
-                                @error('image')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Image URL</label>
+                            <div class="relative">
+                                <input type="url" name="image_url" value="{{ old('image_url') }}"
+                                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors"
+                                    placeholder="https://...">
+                                <i class="fas fa-link absolute left-3 top-3.5 text-gray-400"></i>
                             </div>
                         </div>
 
@@ -126,7 +117,7 @@
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Auteur</label>
                             <div class="relative">
                                 <input type="text" name="auteur" value="{{ old('auteur', 'Coach Didi') }}"
-                                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-900 focus:border-orange-500 focus:ring-orange-500 transition-colors">
+                                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors">
                                 <i class="fas fa-user absolute left-3 top-3.5 text-gray-400"></i>
                             </div>
                         </div>
@@ -135,7 +126,7 @@
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Temps de lecture</label>
                             <div class="relative">
                                 <input type="text" name="temps_lecture" value="{{ old('temps_lecture', '5 min') }}"
-                                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-900 focus:border-orange-500 focus:ring-orange-500 transition-colors">
+                                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors">
                                 <i class="far fa-clock absolute left-3 top-3.5 text-gray-400"></i>
                             </div>
                         </div>
@@ -144,21 +135,4 @@
             </div>
         </div>
     </form>
-
-    <script>
-        function previewImage(input) {
-            const preview = document.getElementById('image-preview');
-            const placeholder = document.getElementById('upload-placeholder');
-            
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.classList.remove('hidden');
-                    placeholder.classList.add('hidden');
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-    </script>
 @endsection

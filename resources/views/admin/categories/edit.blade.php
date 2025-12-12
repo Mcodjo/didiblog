@@ -12,14 +12,14 @@
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Nom de la catégorie</label>
                     <input type="text" name="nom" value="{{ $category->nom }}" required
-                        class="w-full px-4 py-3 rounded-xl border border-gray-900 focus:border-orange-500 focus:ring-orange-500 transition-colors"
+                        class="w-full px-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors"
                         placeholder="Ex: Entretiens, CV & Lettres...">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Description courte</label>
                     <textarea name="description" rows="3"
-                        class="w-full px-4 py-3 rounded-xl border border-gray-900 focus:border-orange-500 focus:ring-orange-500 transition-colors"
+                        class="w-full px-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors"
                         placeholder="De quoi parle cette catégorie ?">{{ $category->description }}</textarea>
                 </div>
 
@@ -28,8 +28,20 @@
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Couleur</label>
                         <div class="flex items-center gap-3">
                             <input type="color" name="couleur" value="{{ $category->couleur }}"
-                                class="h-12 w-16 rounded-lg border border-gray-900 p-1 cursor-pointer">
+                                class="h-12 w-16 rounded-lg border-gray-200 p-1 cursor-pointer">
                             <span class="text-sm text-gray-500">Code: {{ $category->couleur }}</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Icône FontAwesome</label>
+                        <div class="relative">
+                            <input type="text" name="icone" value="{{ $category->icone }}"
+                                class="w-full pl-10 pr-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors"
+                                placeholder="fas fa-...">
+                            <div class="absolute left-3 top-3.5 w-5 flex justify-center text-gray-400">
+                                <i class="{{ $category->icone }}"></i>
+                            </div>
                         </div>
                     </div>
                 </div>

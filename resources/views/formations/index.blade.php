@@ -32,6 +32,7 @@
                         <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold text-white mb-3" style="background-color: {{ $formation->couleur_badge }}">{{ $formation->badge }}</span>
                         @endif
                         <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">{{ $formation->nom }}</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">{{ $formation->description }}</p>
                         
                         <div class="flex items-center justify-between mb-4">
                             <span class="text-sm text-gray-500"><i class="fas fa-layer-group mr-1"></i>{{ $formation->niveau }}</span>
@@ -42,9 +43,9 @@
                         
                         <div class="flex items-center justify-between mb-6">
                             <div class="text-2xl font-bold text-orange-600">
-                                {{ number_format($formation->prix, 0, ',', ' ') }} FCFA
+                                {{ number_format($formation->prix, 0) }}€
                                 @if($formation->prix_barre)
-                                <span class="text-sm text-gray-500 line-through ml-2">{{ number_format($formation->prix_barre, 0, ',', ' ') }} FCFA</span>
+                                <span class="text-sm text-gray-500 line-through ml-2">{{ number_format($formation->prix_barre, 0) }}€</span>
                                 @endif
                             </div>
                             <div class="flex items-center">

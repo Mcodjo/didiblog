@@ -39,9 +39,9 @@
                             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                 <div>
                                     <div class="text-3xl font-bold text-orange-600">
-                                        {{ number_format($formation->prix, 0, ',', ' ') }} FCFA
+                                        {{ number_format($formation->prix, 0) }}€
                                         @if($formation->prix_barre)
-                                        <span class="text-lg text-gray-500 line-through ml-2">{{ number_format($formation->prix_barre, 0, ',', ' ') }} FCFA</span>
+                                        <span class="text-lg text-gray-500 line-through ml-2">{{ number_format($formation->prix_barre, 0) }}€</span>
                                         <span class="text-sm text-green-600 font-semibold ml-2">-{{ $formation->discount_percentage }}%</span>
                                         @endif
                                     </div>

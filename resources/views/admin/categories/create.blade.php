@@ -11,14 +11,14 @@
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Nom de la catégorie</label>
                     <input type="text" name="nom" required
-                        class="w-full px-4 py-3 rounded-xl border border-gray-900 focus:border-orange-500 focus:ring-orange-500 transition-colors"
+                        class="w-full px-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors"
                         placeholder="Ex: Entretiens, CV & Lettres...">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Description courte</label>
                     <textarea name="description" rows="3"
-                        class="w-full px-4 py-3 rounded-xl border border-gray-900 focus:border-orange-500 focus:ring-orange-500 transition-colors"
+                        class="w-full px-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors"
                         placeholder="De quoi parle cette catégorie ?"></textarea>
                 </div>
 
@@ -27,8 +27,18 @@
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Couleur</label>
                         <div class="flex items-center gap-3">
                             <input type="color" name="couleur" value="#f97316"
-                                class="h-12 w-16 rounded-lg border border-gray-900 p-1 cursor-pointer">
+                                class="h-12 w-16 rounded-lg border-gray-200 p-1 cursor-pointer">
                             <span class="text-sm text-gray-500">Choisissez une couleur distinctive</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Icône FontAwesome</label>
+                        <div class="relative">
+                            <input type="text" name="icone" value="fas fa-folder"
+                                class="w-full pl-10 pr-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors"
+                                placeholder="fas fa-...">
+                            <i class="fas fa-icons absolute left-3 top-3.5 text-gray-400"></i>
                         </div>
                     </div>
                 </div>

@@ -115,15 +115,6 @@
                     class="fas fa-inbox w-6 flex-shrink-0 {{ request()->routeIs('admin.contacts.*') ? 'text-white' : 'text-slate-400' }}"></i>
                 Messages
             </a>
-
-            <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mt-8 mb-2">Paramètres</p>
-
-            <a href="{{ route('admin.settings.edit') }}"
-                class="sidebar-link flex items-center px-4 py-3.5 rounded-xl text-sm font-medium {{ request()->routeIs('admin.settings.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                <i
-                    class="fas fa-file-alt w-6 flex-shrink-0 {{ request()->routeIs('admin.settings.*') ? 'text-white' : 'text-slate-400' }}"></i>
-                Pages du site
-            </a>
         </nav>
 
         <!-- User Profile -->
