@@ -41,9 +41,9 @@
             </div>
 
             <!-- Sidebar Options (Right Column) -->
-            <div class="space-y-6">
+            <div class="lg:sticky lg:top-24 space-y-6 self-start">
                 <!-- Actions Card -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-lg font-bold text-gray-900">Publication</h3>
                         <div class="flex items-center gap-2">
