@@ -1,0 +1,8 @@
+{
+  "projectId": "ee9100f3-7620-4408-928e-ec04171de95d",
+  "createdAt": 1765460136121,
+  "startupCommands": [
+    "php artisan serve --host=127.0.0.1 --port=8000",
+    "bun run dev"
+  ]
+}
