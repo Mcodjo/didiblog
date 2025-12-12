@@ -31,6 +31,22 @@
         [x-cloak] {
             display: none !important;
         }
+
+        /* Enforce visible borders for inputs */
+        input:not([type="checkbox"]):not([type="radio"]),
+        textarea,
+        select {
+            border: 1px solid #94a3b8 !important;
+            /* slate-400 */
+        }
+
+        input:not([type="checkbox"]):not([type="radio"]):focus,
+        textarea:focus,
+        select:focus {
+            border-color: #f97316 !important;
+            /* orange-600 */
+            ring: 2px solid #f97316 !important;
+        }
     </style>
 </head>
 
