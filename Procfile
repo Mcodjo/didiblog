@@ -1,1 +1,1 @@
-web: $_SCALINGO_PHP_APACHE_BIN public/
+web: heroku-php-apache2 public/
