@@ -1,0 +1,73 @@
+services:
+
+  # Application PHP-FPM
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: didiblog_app
+    restart: unless-stopped
+    volumes:
+      - .:/var/www
+      - ./storage:/var/www/storage
+    environment:
+      - APP_ENV=${APP_ENV:-production}
+      - APP_KEY=${APP_KEY}
+      - APP_URL=${APP_URL:-http://localhost}
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE:-didiblog}
+      - DB_USERNAME=${DB_USERNAME:-didiblog_user}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - SESSION_DRIVER=file
+      - CACHE_STORE=file
+      - QUEUE_CONNECTION=sync
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - didiblog_network
+
+  # Serveur Nginx
+  nginx:
+    image: nginx:alpine
+    container_name: didiblog_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - didiblog_network
+
+  # Base de données MySQL
+  db:
+    image: mysql:8.0
+    container_name: didiblog_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-didiblog}
+      MYSQL_USER: ${DB_USERNAME:-didiblog_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootsecret}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - didiblog_network
+
+volumes:
+  db_data:
+    driver: local
+
+networks:
+  didiblog_network:
+    driver: bridge
