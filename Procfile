@@ -1,1 +1,1 @@
-web: vendor/bin/heroku-php-apache2 public/
+web: $_SCALINGO_PHP_APACHE_BIN public/
