@@ -110,4 +110,12 @@ class FormationController extends Controller
         return redirect()->route('admin.formations.index')
             ->with('success', 'Formation supprimée avec succès !');
     }
+
+    public function toggleStatus(Formation $formation)
+    {
+        $formation->update(['actif' => !$formation->actif]);
+        
+        $status = $formation->actif ? 'activée' : 'désactivée';
+        return redirect()->back()->with('success', "Formation {$status} avec succès !");
+    }
 }

@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\FormationController as AdminFormationController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Admin\NewsletterController as AdminNewsletterController;
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
+use App\Http\Controllers\Admin\SiteSettingController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/a-propos', [HomeController::class, 'about'])->name('about');
@@ -48,6 +49,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::resource('articles', AdminArticleController::class)->except(['show']);
     Route::resource('categories', AdminCategoryController::class)->except(['show']);
     Route::resource('formations', AdminFormationController::class)->except(['show']);
+    Route::post('/formations/{formation}/toggle', [AdminFormationController::class, 'toggleStatus'])->name('formations.toggle');
     
     Route::get('/comments', [AdminCommentController::class, 'index'])->name('comments.index');
     Route::post('/comments/{comment}/approve', [AdminCommentController::class, 'approve'])->name('comments.approve');
@@ -60,4 +62,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::get('/contacts', [AdminContactController::class, 'index'])->name('contacts.index');
     Route::get('/contacts/{contact}', [AdminContactController::class, 'show'])->name('contacts.show');
     Route::delete('/contacts/{contact}', [AdminContactController::class, 'destroy'])->name('contacts.destroy');
+    
+    Route::get('/settings', [SiteSettingController::class, 'edit'])->name('settings.edit');
+    Route::post('/settings', [SiteSettingController::class, 'update'])->name('settings.update');
 });

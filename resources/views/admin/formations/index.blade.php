@@ -49,10 +49,10 @@
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex flex-col items-start text-sm">
-                                    <span class="font-bold text-gray-900">{{ number_format($f->prix, 0) }}€</span>
+                                    <span class="font-bold text-gray-900">{{ number_format($f->prix, 0) }} XOF</span>
                                     @if($f->prix_barre)
                                         <span
-                                            class="text-xs text-gray-400 line-through">{{ number_format($f->prix_barre, 0) }}€</span>
+                                            class="text-xs text-gray-400 line-through">{{ number_format($f->prix_barre, 0) }} XOF</span>
                                     @endif
                                 </div>
                             </td>
@@ -72,6 +72,14 @@
                             <td class="px-6 py-4 text-right">
                                 <div
                                     class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <form action="{{ route('admin.formations.toggle', $f) }}" method="POST" class="inline-block">
+                                        @csrf
+                                        <button type="submit"
+                                            class="w-8 h-8 rounded-lg flex items-center justify-center {{ $f->actif ? 'text-orange-400 hover:bg-orange-50 hover:text-orange-600' : 'text-green-400 hover:bg-green-50 hover:text-green-600' }} transition-colors"
+                                            title="{{ $f->actif ? 'Désactiver' : 'Activer' }}">
+                                            <i class="fas fa-{{ $f->actif ? 'toggle-off' : 'toggle-on' }} text-sm"></i>
+                                        </button>
+                                    </form>
                                     <a href="{{ route('admin.formations.edit', $f) }}"
                                         class="w-8 h-8 rounded-lg flex items-center justify-center text-blue-400 hover:bg-blue-50 hover:text-blue-600 transition-colors"
                                         title="Modifier">

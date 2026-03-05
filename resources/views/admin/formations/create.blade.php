@@ -3,7 +3,7 @@
 @section('subtitle', 'Ajoutez un nouveau programme de formation')
 
 @section('content')
-    <form action="{{ route('admin.formations.store') }}" method="POST">
+    <form action="{{ route('admin.formations.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Main Content -->
@@ -29,8 +29,15 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Niveau</label>
-                                <input type="text" name="niveau" value="Débutant"
+                                <select name="niveau"
                                     class="w-full px-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors">
+                                    <option value="">Sélectionnez un niveau</option>
+                                    <option value="Débutant" selected>Débutant</option>
+                                    <option value="Intermédiaire">Intermédiaire</option>
+                                    <option value="Avancé">Avancé</option>
+                                    <option value="Expert">Expert</option>
+                                    <option value="Tous niveaux">Tous niveaux</option>
+                                </select>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Durée estimée</label>
@@ -46,12 +53,11 @@
 
                     <div class="space-y-6">
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Image de couverture URL</label>
-                            <div class="relative">
-                                <input type="url" name="image_url" placeholder="https://..."
-                                    class="w-full pl-10 pr-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors">
-                                <i class="fas fa-image absolute left-3 top-4 text-gray-400"></i>
-                            </div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Image de couverture</label>
+                            <input type="file" name="image" accept="image/*"
+                                class="w-full px-4 py-2.5 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100">
+                            <p class="text-xs text-gray-500 mt-1">JPG, PNG, GIF, WEBP (max 2MB)</p>
+                            @error('image')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
                         </div>
 
                         <div>
@@ -75,11 +81,11 @@
 
                     <div class="space-y-6 mb-6">
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Prix (€)</label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Prix (XOF)</label>
                             <div class="relative">
                                 <input type="number" name="prix" step="0.01" required
-                                    class="w-full pl-8 pr-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors font-mono text-lg font-bold text-gray-900">
-                                <span class="absolute left-4 top-4 text-gray-400">€</span>
+                                    class="w-full px-4 pr-16 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors font-mono text-lg font-bold text-gray-900">
+                                <span class="absolute right-4 top-4 text-gray-400 font-semibold">XOF</span>
                             </div>
                         </div>
 
@@ -87,8 +93,8 @@
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Prix barré (Optionnel)</label>
                             <div class="relative">
                                 <input type="number" name="prix_barre" step="0.01"
-                                    class="w-full pl-8 pr-4 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors font-mono text-gray-500">
-                                <span class="absolute left-4 top-4 text-gray-400">€</span>
+                                    class="w-full px-4 pr-16 py-3 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors font-mono text-gray-500">
+                                <span class="absolute right-4 top-4 text-gray-400 font-semibold">XOF</span>
                             </div>
                             <p class="text-xs text-gray-500 mt-1">Laissez vide si pas de promotion</p>
                         </div>

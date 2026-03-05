@@ -33,19 +33,24 @@
         }
 
         /* Enforce visible borders for inputs */
-        input:not([type="checkbox"]):not([type="radio"]),
+        input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
         textarea,
         select {
-            border: 1px solid #94a3b8 !important;
-            /* slate-400 */
+            border: 2px solid #1e293b !important;
+            /* slate-800 - contour noir visible */
         }
 
-        input:not([type="checkbox"]):not([type="radio"]):focus,
+        input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
         textarea:focus,
         select:focus {
             border-color: #f97316 !important;
             /* orange-600 */
             ring: 2px solid #f97316 !important;
+        }
+        
+        /* File input styling */
+        input[type="file"] {
+            border: 2px solid #1e293b !important;
         }
     </style>
 </head>
@@ -61,11 +66,11 @@
     </div>
 
     <!-- Sidebar (Fixed Position) -->
-    <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="admin-sidebar fixed inset-y-0 left-0 z-50 w-72 text-white transition-transform duration-300 ease-in-out 
-                  lg:translate-x-0 shadow-xl border-r border-slate-800 flex flex-col h-full overflow-y-auto">
+    <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="admin-sidebar fixed top-0 left-0 bottom-0 z-50 w-64 text-white transition-transform duration-300 ease-in-out 
+                  lg:translate-x-0 shadow-xl border-r border-slate-800 flex flex-col overflow-y-auto">
 
         <!-- Logo Section -->
-        <div class="h-20 flex items-center px-8 border-b border-slate-800 flex-shrink-0 sticky top-0 bg-[#0f172a] z-10">
+        <div class="h-20 flex items-center px-6 border-b border-slate-800 flex-shrink-0 bg-[#0f172a]">
             <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 group">
                 <div
                     class="w-10 h-10 bg-gradient-to-br from-orange-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
@@ -83,58 +88,67 @@
         </div>
 
         <!-- Navigation Links -->
-        <nav class="flex-1 px-4 py-6 space-y-2">
-            <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Menu Principal</p>
+        <nav class="flex-1 px-4 py-6 space-y-3">
+            <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Menu Principal</p>
 
             <a href="{{ route('admin.dashboard') }}"
-                class="sidebar-link flex items-center px-4 py-3.5 rounded-xl text-sm font-medium {{ request()->routeIs('admin.dashboard') ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                class="sidebar-link flex items-center gap-3 px-5 py-4 rounded-xl text-base font-medium {{ request()->routeIs('admin.dashboard') ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                 <i
-                    class="fas fa-th-large w-6 flex-shrink-0 {{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-slate-400' }}"></i>
+                    class="fas fa-th-large text-lg flex-shrink-0 {{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-slate-400' }}"></i>
                 Dashboard
             </a>
             <a href="{{ route('admin.articles.index') }}"
-                class="sidebar-link flex items-center px-4 py-3.5 rounded-xl text-sm font-medium {{ request()->routeIs('admin.articles.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                class="sidebar-link flex items-center gap-3 px-5 py-4 rounded-xl text-base font-medium {{ request()->routeIs('admin.articles.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                 <i
-                    class="fas fa-newspaper w-6 flex-shrink-0 {{ request()->routeIs('admin.articles.*') ? 'text-white' : 'text-slate-400' }}"></i>
+                    class="fas fa-newspaper text-lg flex-shrink-0 {{ request()->routeIs('admin.articles.*') ? 'text-white' : 'text-slate-400' }}"></i>
                 Articles
             </a>
             <a href="{{ route('admin.categories.index') }}"
-                class="sidebar-link flex items-center px-4 py-3.5 rounded-xl text-sm font-medium {{ request()->routeIs('admin.categories.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                class="sidebar-link flex items-center gap-3 px-5 py-4 rounded-xl text-base font-medium {{ request()->routeIs('admin.categories.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                 <i
-                    class="fas fa-folder-tree w-6 flex-shrink-0 {{ request()->routeIs('admin.categories.*') ? 'text-white' : 'text-slate-400' }}"></i>
+                    class="fas fa-folder-tree text-lg flex-shrink-0 {{ request()->routeIs('admin.categories.*') ? 'text-white' : 'text-slate-400' }}"></i>
                 Catégories
             </a>
             <a href="{{ route('admin.formations.index') }}"
-                class="sidebar-link flex items-center px-4 py-3.5 rounded-xl text-sm font-medium {{ request()->routeIs('admin.formations.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                class="sidebar-link flex items-center gap-3 px-5 py-4 rounded-xl text-base font-medium {{ request()->routeIs('admin.formations.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                 <i
-                    class="fas fa-graduation-cap w-6 flex-shrink-0 {{ request()->routeIs('admin.formations.*') ? 'text-white' : 'text-slate-400' }}"></i>
+                    class="fas fa-graduation-cap text-lg flex-shrink-0 {{ request()->routeIs('admin.formations.*') ? 'text-white' : 'text-slate-400' }}"></i>
                 Formations
             </a>
 
-            <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mt-8 mb-2">Gestion</p>
+            <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mt-8 mb-3">Gestion</p>
 
             <a href="{{ route('admin.comments.index') }}"
-                class="sidebar-link flex items-center px-4 py-3.5 rounded-xl text-sm font-medium {{ request()->routeIs('admin.comments.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                class="sidebar-link flex items-center gap-3 px-5 py-4 rounded-xl text-base font-medium {{ request()->routeIs('admin.comments.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                 <i
-                    class="fas fa-comments w-6 flex-shrink-0 {{ request()->routeIs('admin.comments.*') ? 'text-white' : 'text-slate-400' }}"></i>
+                    class="fas fa-comments text-lg flex-shrink-0 {{ request()->routeIs('admin.comments.*') ? 'text-white' : 'text-slate-400' }}"></i>
                 Commentaires
             </a>
             <a href="{{ route('admin.newsletters.index') }}"
-                class="sidebar-link flex items-center px-4 py-3.5 rounded-xl text-sm font-medium {{ request()->routeIs('admin.newsletters.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                class="sidebar-link flex items-center gap-3 px-5 py-4 rounded-xl text-base font-medium {{ request()->routeIs('admin.newsletters.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                 <i
-                    class="fas fa-envelope-open-text w-6 flex-shrink-0 {{ request()->routeIs('admin.newsletters.*') ? 'text-white' : 'text-slate-400' }}"></i>
+                    class="fas fa-envelope-open-text text-lg flex-shrink-0 {{ request()->routeIs('admin.newsletters.*') ? 'text-white' : 'text-slate-400' }}"></i>
                 Newsletters
             </a>
             <a href="{{ route('admin.contacts.index') }}"
-                class="sidebar-link flex items-center px-4 py-3.5 rounded-xl text-sm font-medium {{ request()->routeIs('admin.contacts.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                class="sidebar-link flex items-center gap-3 px-5 py-4 rounded-xl text-base font-medium {{ request()->routeIs('admin.contacts.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                 <i
-                    class="fas fa-inbox w-6 flex-shrink-0 {{ request()->routeIs('admin.contacts.*') ? 'text-white' : 'text-slate-400' }}"></i>
+                    class="fas fa-inbox text-lg flex-shrink-0 {{ request()->routeIs('admin.contacts.*') ? 'text-white' : 'text-slate-400' }}"></i>
                 Messages
+            </a>
+
+            <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mt-8 mb-3">Paramètres</p>
+
+            <a href="{{ route('admin.settings.edit') }}"
+                class="sidebar-link flex items-center gap-3 px-5 py-4 rounded-xl text-base font-medium {{ request()->routeIs('admin.settings.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                <i
+                    class="fas fa-cog text-lg flex-shrink-0 {{ request()->routeIs('admin.settings.*') ? 'text-white' : 'text-slate-400' }}"></i>
+                Page À propos
             </a>
         </nav>
 
         <!-- User Profile -->
-        <div class="p-4 border-t border-slate-800 sticky bottom-0 bg-[#0f172a] z-10">
+        <div class="p-4 border-t border-slate-800 bg-[#0f172a]">
             <div class="flex items-center gap-3 px-4 py-3 mb-2 rounded-xl bg-slate-800/50">
                 <div
                     class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-sm font-bold shadow-md text-white">
@@ -163,10 +177,10 @@
     </aside>
 
     <!-- Main Content Wrapper -->
-    <div class="min-h-screen lg:ml-72 flex flex-col transition-all duration-300">
+    <div class="min-h-screen transition-all duration-300 bg-gray-50 lg:ml-64">
         <!-- Header Sticky -->
         <header
-            class="bg-white/90 backdrop-blur sticky top-0 z-30 border-b border-gray-200 px-6 py-4 flex justify-between items-center shadow-sm">
+            class="bg-white/90 backdrop-blur sticky top-0 z-30 border-b border-gray-200 px-4 md:px-8 py-4 flex justify-between items-center shadow-sm">
             <div class="flex items-center gap-4">
                 <button @click="sidebarOpen = true"
                     class="lg:hidden p-2 -ml-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
@@ -186,7 +200,7 @@
         </header>
 
         <!-- Page Content -->
-        <main class="flex-1 p-6 md:p-8">
+        <main class="flex-1 p-4 md:p-6 lg:p-8 w-full">
             @if(session('success'))
                 <div
                     class="mb-6 p-4 rounded-xl bg-green-50 border border-green-100 text-green-700 flex items-center gap-3 animate-fade-in-down shadow-sm">

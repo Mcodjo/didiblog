@@ -12,49 +12,53 @@ class BlogController extends Controller
     {
         $categorySlug = $request->get('category');
         $search = $request->get('search');
-        
-        $query = Article::with('categorie')->active();
-        
+
+        $query = Article::with('categorie')->where('actif', true);
+
         if ($search) {
-            $query->search($search);
+            $query->where(function ($q) use ($search) {
+                $q->where('titre', 'like', "%{$search}%")
+                  ->orWhere('contenu', 'like', "%{$search}%");
+            });
         }
-        
+
         if ($categorySlug) {
-            $category = Category::where('slug', $categorySlug)->active()->first();
+            $category = Category::where('slug', $categorySlug)->where('actif', true)->first();
             if ($category) {
                 $query->where('categorie_id', $category->id);
             }
         }
-        
+
         $articles = $query->latest()->paginate(9);
-        
-        $categories = Category::withCount(['articles' => function ($query) {
-            $query->where('actif', true);
-        }])
-            ->active()
-            ->ordered()
-            ->get();
-            
-        return view('blog.index', compact('articles', 'categories', 'categorySlug', 'search'));
+
+        $featured = Article::where('actif', true)->where('featured', true)->first();
+        if (!$featured && $articles->isNotEmpty()) {
+            $featured = $articles->first();
+        }
+
+        $categories = Category::withCount(['articles' => function ($q) {
+            $q->where('actif', true);
+        }])->where('actif', true)->get();
+
+        return view('blog.index', compact('articles', 'categories', 'categorySlug', 'search', 'featured'));
     }
 
     public function show($slug)
     {
         $article = Article::with(['categorie', 'approvedComments'])
             ->where('slug', $slug)
-            ->active()
+            ->where('actif', true)
             ->firstOrFail();
-            
-        $article->incrementViews();
-        
+
+        $article->increment('vues');
+
         $relatedArticles = Article::with('categorie')
-            ->active()
             ->where('categorie_id', $article->categorie_id)
             ->where('id', '!=', $article->id)
-            ->latest()
-            ->take(3)
+            ->where('actif', true)
+            ->limit(3)
             ->get();
-            
+
         return view('blog.show', compact('article', 'relatedArticles'));
     }
 }

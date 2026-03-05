@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ArticleRequest;
 use App\Models\Article;
 use App\Models\Category;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
@@ -26,31 +26,21 @@ class ArticleController extends Controller
         return view('admin.articles.create', compact('categories'));
     }
 
-    public function store(Request $request)
+    public function store(ArticleRequest $request)
     {
-        $validated = $request->validate([
-            'titre' => 'required|string|max:255',
-            'extrait' => 'required|string',
-            'contenu' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'categorie_id' => 'required|exists:categories,id',
-            'auteur' => 'nullable|string|max:255',
-            'temps_lecture' => 'nullable|string|max:20',
-            'featured' => 'boolean',
-            'actif' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('articles', 'public');
-            $validated['image_url'] = '/storage/' . $path;
+            $validated['image_url'] = Storage::url($path);
         }
         unset($validated['image']);
 
-        $validated['slug'] = Str::slug($validated['titre']);
-        $validated['auteur'] = $validated['auteur'] ?? 'Coach Didi';
+        $validated['slug']          = $this->uniqueSlug($validated['titre']);
+        $validated['auteur']        = $validated['auteur'] ?? 'Coach Didi';
         $validated['temps_lecture'] = $validated['temps_lecture'] ?? '5 min';
-        $validated['featured'] = $request->boolean('featured');
-        $validated['actif'] = $request->boolean('actif', true);
+        $validated['featured']      = $request->boolean('featured');
+        $validated['actif']         = $request->boolean('actif', true);
 
         Article::create($validated);
 
@@ -64,32 +54,20 @@ class ArticleController extends Controller
         return view('admin.articles.edit', compact('article', 'categories'));
     }
 
-    public function update(Request $request, Article $article)
+    public function update(ArticleRequest $request, Article $article)
     {
-        $validated = $request->validate([
-            'titre' => 'required|string|max:255',
-            'extrait' => 'required|string',
-            'contenu' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'categorie_id' => 'required|exists:categories,id',
-            'auteur' => 'nullable|string|max:255',
-            'temps_lecture' => 'nullable|string|max:20',
-            'featured' => 'boolean',
-            'actif' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('image')) {
-            if ($article->image_url && str_starts_with($article->image_url, '/storage/')) {
-                Storage::disk('public')->delete(str_replace('/storage/', '', $article->image_url));
-            }
+            $this->deleteImage($article->image_url);
             $path = $request->file('image')->store('articles', 'public');
-            $validated['image_url'] = '/storage/' . $path;
+            $validated['image_url'] = Storage::url($path);
         }
         unset($validated['image']);
 
-        $validated['slug'] = Str::slug($validated['titre']);
+        $validated['slug']     = $this->uniqueSlug($validated['titre'], $article->id);
         $validated['featured'] = $request->boolean('featured');
-        $validated['actif'] = $request->boolean('actif');
+        $validated['actif']    = $request->boolean('actif');
 
         $article->update($validated);
 
@@ -99,13 +77,52 @@ class ArticleController extends Controller
 
     public function destroy(Article $article)
     {
-        if ($article->image_url && str_starts_with($article->image_url, '/storage/')) {
-            Storage::disk('public')->delete(str_replace('/storage/', '', $article->image_url));
-        }
-        
+        $this->deleteImage($article->image_url);
         $article->delete();
 
         return redirect()->route('admin.articles.index')
             ->with('success', 'Article supprimé avec succès !');
+    }
+
+    // -------------------------------------------------------------------------
+    // Helpers privés
+    // -------------------------------------------------------------------------
+
+    /**
+     * Génère un slug unique en ajoutant un suffixe numérique si nécessaire.
+     */
+    private function uniqueSlug(string $titre, ?int $excludeId = null): string
+    {
+        $base  = Str::slug($titre);
+        $slug  = $base;
+        $count = 1;
+
+        while (
+            Article::where('slug', $slug)
+                ->when($excludeId, fn ($q) => $q->where('id', '!=', $excludeId))
+                ->exists()
+        ) {
+            $slug = $base . '-' . $count++;
+        }
+
+        return $slug;
+    }
+
+    /**
+     * Supprime l'image associée à un article depuis le disque public.
+     */
+    private function deleteImage(?string $imageUrl): void
+    {
+        if (!$imageUrl) {
+            return;
+        }
+
+        // Extrait le chemin relatif qu'il y ait /storage/... ou une URL complète
+        $urlPath = parse_url($imageUrl, PHP_URL_PATH) ?? '';
+        $path    = ltrim(str_replace('/storage', '', $urlPath), '/');
+
+        if ($path) {
+            Storage::disk('public')->delete($path);
+        }
     }
 }

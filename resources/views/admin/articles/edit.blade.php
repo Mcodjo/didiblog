@@ -3,7 +3,7 @@
 @section('subtitle', 'Mettez à jour votre contenu')
 
 @section('content')
-    <form action="{{ route('admin.articles.update', $article) }}" method="POST">
+    <form action="{{ route('admin.articles.update', $article) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -90,11 +90,18 @@
 
                 <!-- Meta Data Card -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="text-lg font-bold text-gray-900 mb-6">Détails</h3>
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-cog text-purple-600 text-lg"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900">Détails</h3>
+                    </div>
 
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Catégorie</label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-folder text-gray-400 mr-2"></i>Catégorie
+                            </label>
                             <select name="categorie_id" required
                                 class="w-full px-4 py-2.5 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors">
                                 @foreach($categories as $cat)
@@ -105,41 +112,51 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Image URL</label>
-                            <div class="relative">
-                                <input type="url" name="image_url" value="{{ old('image_url', $article->image_url) }}"
-                                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors"
-                                    placeholder="https://...">
-                                <i class="fas fa-link absolute left-3 top-3.5 text-gray-400"></i>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-image text-gray-400 mr-2"></i>Image de couverture
+                            </label>
+                            @if($article->image_url)
+                            <div class="mb-3">
+                                <img src="{{ $article->image_url }}" alt="Image actuelle" class="w-full h-32 object-cover rounded-xl border-2 border-gray-200">
+                                <p class="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                                    <i class="fas fa-check-circle text-green-500"></i>Image actuelle
+                                </p>
                             </div>
+                            @endif
+                            <input type="file" name="image" accept="image/*"
+                                class="w-full px-4 py-2.5 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100">
+                            <p class="text-xs text-gray-500 mt-1">JPG, PNG, WEBP (max 2MB). Laissez vide pour conserver l'image actuelle.</p>
+                            @error('image')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Auteur</label>
-                            <div class="relative">
-                                <input type="text" name="auteur" value="{{ old('auteur', $article->auteur) }}"
-                                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors">
-                                <i class="fas fa-user absolute left-3 top-3.5 text-gray-400"></i>
-                            </div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-user text-gray-400 mr-2"></i>Auteur
+                            </label>
+                            <input type="text" name="auteur" value="{{ old('auteur', $article->auteur) }}"
+                                class="w-full px-4 py-2.5 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors">
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Temps de lecture</label>
-                            <div class="relative">
-                                <input type="text" name="temps_lecture"
-                                    value="{{ old('temps_lecture', $article->temps_lecture) }}"
-                                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors">
-                                <i class="far fa-clock absolute left-3 top-3.5 text-gray-400"></i>
-                            </div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="far fa-clock text-gray-400 mr-2"></i>Temps de lecture
+                            </label>
+                            <input type="text" name="temps_lecture"
+                                value="{{ old('temps_lecture', $article->temps_lecture) }}"
+                                class="w-full px-4 py-2.5 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-colors">
                         </div>
 
                         <div class="pt-4 border-t border-gray-100">
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-gray-500">Créé le</span>
+                            <div class="flex justify-between items-center text-sm mb-3">
+                                <span class="text-gray-500 flex items-center gap-2">
+                                    <i class="fas fa-calendar-plus text-gray-400"></i>Créé le
+                                </span>
                                 <span class="font-medium text-gray-900">{{ $article->created_at->format('d/m/Y') }}</span>
                             </div>
-                            <div class="flex justify-between items-center text-sm mt-2">
-                                <span class="text-gray-500">Dernière modif.</span>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-500 flex items-center gap-2">
+                                    <i class="fas fa-calendar-check text-gray-400"></i>Dernière modif.
+                                </span>
                                 <span class="font-medium text-gray-900">{{ $article->updated_at->format('d/m/Y') }}</span>
                             </div>
                         </div>
